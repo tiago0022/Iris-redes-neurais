@@ -3,7 +3,7 @@ import random
 import numpy as np
 
 
-def perceptronTrain(maxEpoch, learningRate, sampleList):
+def perceptronTrain(maxEpoch, learningRate, sampleList):  # Treinamento utilizando degrau
 
     printSampleIteration = True
 
@@ -69,7 +69,50 @@ def perceptronTrain(maxEpoch, learningRate, sampleList):
         print('\nErro acumulado |E|:', cumulativeError)
         print('\n============== FIM ÉPOCA', epochT, '==============')
         epochT += 1
-    return np.hstack((biasB, weigthW))
+    print('\nPesos W final:')
+    print(weigthW)
+    print('\nBias B final:')
+    print(biasB)
+    print('\n==================================================')
+    print('=============== FIM DO TREINAMENTO ===============')
+    print('==================================================\n')
+    return [biasB, weigthW]
+
+
+def perceptronTest(biasB, weigthW, sampleList):  # Teste utilizando degrau
+
+    print('\nTestes:')
+
+    errorCount = 0
+    totalCount = len(sampleList)
+
+    # Obtem o resultado de cada amostra
+    for sample in sampleList:
+        # Atributos da amostra de entrada X
+        inputX = np.matrix(sample.attributeListX).transpose()
+        # Cálculo W * X + B
+        WXB = np.matmul(weigthW, inputX) + biasB
+        # Resultado esperado D
+        labelD = np.matrix(sample.classY).transpose()
+        # Resultado obtido Y por meio da função de ativação degrau f
+        outputY = stepActivation(WXB)
+        # Erro obtido comparando D e Y
+        errorE = labelD - outputY
+        # Verifica se o vetor E tem todos os termos iguais a 0
+        if(np.count_nonzero(errorE)):
+            errorCount += 1
+    print('\nTotal de amostras para teste:', totalCount)
+    print('Acertos:', totalCount-errorCount)
+    print('Erros:', errorCount)
+
+    # Cálculo da taxa de acerto
+    rate = ((totalCount-errorCount)/totalCount)*100
+
+    print('\nAcurácia: ', round(rate, 2), '%\n', sep='')
+
+    print('\n==================================================')
+    print('================== FIM DO TESTE ==================')
+    print('==================================================\n')
 
 
 def initVector(size: int):  # inicializa um vetor de valores entre -0.9 e 0.9

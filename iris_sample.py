@@ -11,7 +11,7 @@ class Sample:  # classe que representa uma linha da base de dados
 
     def __init__(self, line):
 
-        values = line[:-1].split(',')
+        values = line.replace('\n', '').split(',')
 
         self.attributeListX = []  # vetor de entrada X
 
@@ -24,7 +24,7 @@ class Sample:  # classe que representa uma linha da base de dados
         # mapeia a classe de acordo com seu vetor:
         if(self.className == SETOSA_NAME):
             self.classY = SETOSA_VECTOR
-        if(self.className == VERSICOLOR_NAME):
+        elif(self.className == VERSICOLOR_NAME):
             self.classY = VERSICOLOR_VECTOR
-        if(self.className == VIRGINICA_NAME):
+        elif(self.className == VIRGINICA_NAME):
             self.classY = VIRGINICA_VECTOR

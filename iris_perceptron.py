@@ -1,5 +1,5 @@
 from file_read import readFile
-from perceptron import perceptronTrain
+from perceptron import perceptronTrain, perceptronTest
 from iris_sample import Sample
 import sys
 
@@ -15,10 +15,13 @@ filePath = 'iris.data'  # Argumento 3: arquivo fonte
 if(len(sys.argv) > 3 and sys.argv[3]):
     filePath = sys.argv[3]
 
+# Leitura do arquivo
 data = readFile(filePath)
 trainingData = data[0]
 testData = data[1]
 
+# Treinamento
 weigth = perceptronTrain(maxEpoch, learningRate, trainingData)
-print('\nBias B + pesos W finais:\n')
-print(weigth)
+
+# Teste
+perceptronTest(weigth[0], weigth[1], testData)
