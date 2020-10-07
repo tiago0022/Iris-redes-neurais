@@ -1,4 +1,5 @@
 from iris_sample import Sample
+import random
 
 
 def readFile(fileName: str):  # executa a leitura do arquivo e traduz para a entidade conhecida
@@ -16,13 +17,15 @@ def readFile(fileName: str):  # executa a leitura do arquivo e traduz para a ent
             testData.append(Sample(line))
         i += 1
 
-    data = []  # a variável data será retornada contendo o conjunto de testes e o conjunto de treinamento
+    # Embaralha as listas para que o algoritmo não vicie no tipo inicial
+    random.shuffle(trainingData)
+    random.shuffle(testData)
+
+    # A variável data será retornada contendo o conjunto de testes e o conjunto de treinamento
+    data = []
     data.append(trainingData)
     data.append(testData)
 
     file.close()
-
-    # for x in trainingData:
-    #     print(x.attributeListX)
 
     return data
