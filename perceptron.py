@@ -2,8 +2,10 @@ from iris_sample import Sample
 import random
 import numpy as np
 
+STEP = 'd'
+SIGM = 's'
 
-def perceptronTrain(maxEpoch, learningRate, sampleList):  # Treinamento utilizando degrau
+def perceptronTrain(functionAct, maxEpoch, learningRate, sampleList):  # Treinamento utilizando degrau
 
     printSampleIteration = True
 
@@ -33,7 +35,10 @@ def perceptronTrain(maxEpoch, learningRate, sampleList):  # Treinamento utilizan
             # Resultado esperado D
             labelD = np.matrix(sample.classY).transpose()
             # Resultado obtido Y por meio da função de ativação degrau f
-            outputY = stepActivation(WXB)
+            if(functionAct == STEP):
+                outputY = stepActivation(WXB)
+            elif(functionAct == SIGM):
+                outputY = sigmoidActivation(WXB)
             # Erro obtido comparando D e Y
             errorE = labelD - outputY
             # Cálculo de (alpha * E * X) que será a matriz de ajustes aplicados à W
@@ -79,7 +84,7 @@ def perceptronTrain(maxEpoch, learningRate, sampleList):  # Treinamento utilizan
     return [biasB, weigthW]
 
 
-def perceptronTest(biasB, weigthW, sampleList):  # Teste utilizando degrau
+def perceptronTest(functionAct, biasB, weigthW, sampleList):  # Teste utilizando degrau
 
     print('\nTestes:')
 
@@ -95,7 +100,10 @@ def perceptronTest(biasB, weigthW, sampleList):  # Teste utilizando degrau
         # Resultado esperado D
         labelD = np.matrix(sample.classY).transpose()
         # Resultado obtido Y por meio da função de ativação degrau f
-        outputY = stepActivation(WXB)
+        if(functionAct == STEP):
+            outputY = stepActivation(WXB)
+        elif(functionAct == SIGM):
+            outputY = sigmoidActivation(WXB)
         # Erro obtido comparando D e Y
         errorE = labelD - outputY
         # Verifica se o vetor E tem todos os termos iguais a 0
@@ -138,6 +146,20 @@ def stepActivation(vector):  # função de ativação degrau
             stepVector.append(0)
     return np.matrix(stepVector).transpose()
 
+def sigmoidActivation(vector): # função de ativação sigmoidal
+    sigmVector = []
+    for element in vector:
+        val = 1 /(1+np.exp(-element))
+        sigmVector.append(val)
+
+    tempsigmVector = []
+    for element in sigmVector:
+        if(max(sigmVector)==element):
+            tempsigmVector.append(1)
+        else:
+            tempsigmVector.append(0)
+
+    return np.matrix(tempsigmVector).transpose()
 
 def getScalarError(numberList):  # função para cálculo do erro acumulado escalar
     error = 0
